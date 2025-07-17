@@ -1,70 +1,51 @@
-alert("Hello World! ");
+//Building a simple website
+ //Fake rest api=> means it gives some fake data for a user to use
+ //Defer attribute is used to tell the script that once the whole html and css file is done it will run
+ const h3=document.querySelector(".post-title");
+ h3.addEventListener('click',()=>{
+   alert("You have clicked the button");
+ });
 
-//Strings
-console.log("My name is Ray Shani");
 
-let email='mario.net@gmail.com';
-console.log(email);
+// Button to fetch post
+const button = document.querySelector('button');
+console.log(button); // This will log the button element to the console
+const postSection = document.querySelector('.posts-section');
 
-//String Concatenation
-let firstName="Brandon";
-let lastName="Macharia";
-let fullname=firstName+""+lastName;
-console.log(fullname);
+const fetchdata = async () => {
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const json = await response.json();
+        console.log(json); // This will log the fetched JSON data
 
-//Getting characters
-console.log(firstName[3]);
+        json.forEach(post => {
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('post-card');
 
-//Methods 
-let index=email.indexOf('@');
-console.log(index);
+            const title = document.createElement('p');
+            title.classList.add('post-title');
+            title.innerText = post.title; // Set the title text
 
-// let result=email.lastIndexOf('n');
-// console.log(result);
+            const body = document.createElement('p');
+            body.classList.add('post-body');
+            // body.id = post.body; // Removed: IDs should be unique and usually not the full content of a post body.
+                                  // If you need a unique ID related to the post, use post.id.
+            body.innerText = post.body; // Set the body text
 
-// let slicer=email.slice(0,10);
-// console.log(slicer);
+            // First, append the title and body to the postDiv
+            postDiv.appendChild(title);
+            postDiv.appendChild(body);
 
-let sub=email.substr(0,14)
-console.log(sub);
-
-let replacer=email.replace('m','w');
-console.log(replacer);
-
-//Numbers and math operators
-//BIDMAS= Brackets,Indices,Division,Multiplication,Addition,Subtraction
-//You can bet not a number when you try to divide multiply and minus a number with a string
- 
-//Arrays 
-let ninjas=['michael','leo','donatello','raphael'];
-console.log(ninjas[1]);
-
-//Array methods
-console.log(ninjas.length);
-
-let result=ninjas.join(",");
-console.log(result);
-
-let newResult=ninjas.concat(['desperado','photo']);
-console.log(newResult);
-
-//Boolens we have the == operator used in checking foor the differences
-let name="John";
-console.log(Number(name));
-
-// Working on control statements
-for(let i=0;i<5;i++){
-  console.log(i); 
+            // Now, append the complete postDiv (which contains title and body) to the postSection
+            postSection.appendChild(postDiv);
+        });
+    } catch (error) {
+        console.error("Error fetching data:", error.message); // Use console.error for errors
+    }
 }
 
-const names=['shaun','mario','luigi'];
-for(let i=0;i<names.length;i++){
-  console.log(names[i]);  
-}
-
-
-let anumber=0;
-while(i<0){
-  console.log(0);
-  i++;
-}
+button.addEventListener('click', fetchdata);
